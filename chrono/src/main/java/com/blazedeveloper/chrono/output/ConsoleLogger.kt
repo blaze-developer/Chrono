@@ -43,7 +43,12 @@ internal object ConsoleLogger {
     private class ParallelOutputStream(private vararg val streams: OutputStream) : OutputStream() {
         @Synchronized
         override fun write(byte: Int) {
-            streams.forEach { it.write(byte); it.flush() }
+            streams.forEach { it.write(byte) }
+        }
+
+        @Synchronized
+        override fun flush() {
+            streams.forEach { it.flush() }
         }
     }
 }
