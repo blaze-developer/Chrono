@@ -1,4 +1,5 @@
 # Chrono
+[![](https://jitpack.io/v/com.blazedeveloper/chrono.svg)](https://jitpack.io/#com.blazedeveloper/chrono)
 
 Chrono is a logging, telemetry, and replay framework designed for FTC that enables *log replay*.
 Chrono can write data to log files, and live telemetry streams both using the

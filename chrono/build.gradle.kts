@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    id("maven-publish")
 }
 
 android {
@@ -36,4 +37,18 @@ android {
 
 dependencies {
     implementation(libs.bundles.ftc)
+}
+
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = "com.blazedeveloper"
+            artifactId = "chrono"
+            version = "1.0"
+
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
+    }
 }
