@@ -1,4 +1,4 @@
-package com.blazedeveloper.chrono.inputs
+package com.blazedeveloper.chrono.input
 
 import com.blazedeveloper.chrono.structure.LogTable
 import com.qualcomm.robotcore.hardware.Gamepad

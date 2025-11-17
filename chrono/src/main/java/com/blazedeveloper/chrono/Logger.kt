@@ -2,6 +2,7 @@ package com.blazedeveloper.chrono
 
 import com.blazedeveloper.chrono.dataflow.LogReceiver
 import com.blazedeveloper.chrono.dataflow.ReplaySource
+import com.blazedeveloper.chrono.output.ConsoleLogger
 import com.blazedeveloper.chrono.structure.LogTable
 import com.blazedeveloper.chrono.structure.LoggableInputs
 import kotlin.system.exitProcess
@@ -53,6 +54,8 @@ object Logger {
 
     /** Starts the Logger, its receivers, and sources. */
     fun start() {
+        ConsoleLogger.start()
+
         val metadataTable = table.subtable(
             if (!hasReplaySource) "RealMetadata"
             else "ReplayMetadata"
@@ -67,6 +70,8 @@ object Logger {
 
     /** Stops the Logger, its receivers, and sources.*/
     fun stop() {
+        ConsoleLogger.stop()
+
         logReceivers.forEach { it.stop() }
 
         replaySource?.stop()
@@ -104,6 +109,8 @@ object Logger {
 
     /** Sends data to receivers. Runs after user code. **/
     fun postUser() {
+        ConsoleLogger.log()
+
         val userCodeTime = timeBeforeUser.elapsedNow()
         timings.put("UserCodeNS", userCodeTime.inWholeNanoseconds)
 

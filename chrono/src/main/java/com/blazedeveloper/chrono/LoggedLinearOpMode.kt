@@ -1,7 +1,7 @@
 package com.blazedeveloper.chrono
 
-import com.blazedeveloper.chrono.inputs.replayFromTable
-import com.blazedeveloper.chrono.inputs.writeToTable
+import com.blazedeveloper.chrono.input.replayFromTable
+import com.blazedeveloper.chrono.input.writeToTable
 import com.blazedeveloper.chrono.structure.LogTable
 import com.blazedeveloper.chrono.structure.LoggableInputs
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
