@@ -14,7 +14,7 @@ abstract class LoggedLinearOpMode : LinearOpMode() {
     protected val inInit get() = opmodeInputs.inInit
 
     /** Provides a deterministic and replayable replacement for [isStopRequested] */
-    protected val isStopRequested get() = opmodeInputs.stopRequested
+    protected val shouldStop get() = opmodeInputs.stopRequested
 
     /** Whether or not we are in the first log cycle. */
     private var isFirstCycle = true
@@ -60,7 +60,8 @@ abstract class LoggedLinearOpMode : LinearOpMode() {
     }
 
     /**
-     * Properly updates, and processes deterministic lifecycle inputs like [inInit], and [isActive].
+     * Properly updates, and processes deterministic lifecycle inputs:
+     * [inInit], [isActive], [shouldStop], and gamepad input.
      * Ensure you call this, and Logger lifecycle methods in robot iterations if not using
      * convenience method [loggedCycle] that call this automatically.
      */
