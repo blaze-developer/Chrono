@@ -31,7 +31,6 @@ object Logger {
     fun interface Addable<T> {
         fun add(toAdd: T)
         operator fun plusAssign(toAdd: T) = add(toAdd)
-        operator fun String.invoke(value: String) = Pair(this, value)
     }
 
     /**
