@@ -1,0 +1,16 @@
+[versions]
+agp = "8.13.1"
+kotlin = "2.0.21"
+ftc = "11.0.0"
+
+[libraries]
+ftc-robot = { group = "org.firstinspires.ftc", name = "RobotCore", version.ref = "ftc" }
+ftc-hw = { group = "org.firstinspires.ftc", name = "Hardware", version.ref = "ftc" }
+ftc-common = { group = "org.firstinspires.ftc", name = "FtcCommon", version.ref = "ftc" }
+
+[bundles]
+ftc = ["ftc-robot", "ftc-hw", "ftc-common"]
+
+[plugins]
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+android-library = { id = "com.android.library", version.ref = "agp" }
