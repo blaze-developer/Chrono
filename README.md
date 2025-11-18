@@ -13,7 +13,8 @@ FRC 6328 [here](https://docs.advantagekit.org/getting-started/what-is-advantagek
 
 ## Installation
 Chrono is currently deployed with [Jitpack](https://jitpack.io). To install it, add Jitpack to your
-maven repositories block, and add Chrono to your dependencies:
+maven repositories block, and add Chrono to your dependencies with whichever version you'd like, or
+the most recent release [here](https://github.com/blaze-developer/Chrono/releases):
 
 ```groovy
 repositories {
@@ -22,7 +23,7 @@ repositories {
 
 dependencies {
     // Other dependencies
-    implementation 'com.blazedeveloper:chrono:v0.1.1'
+    implementation 'com.blazedeveloper:chrono:[selected version]'
 }
 ```
 
