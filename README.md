@@ -23,7 +23,7 @@ repositories {
 
 dependencies {
     // Other dependencies
-    implementation 'com.blazedeveloper:chrono:[selected version]'
+    implementation 'com.blazedeveloper:chrono:vX.Y.Z'
 }
 ```
 
