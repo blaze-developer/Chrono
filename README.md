@@ -8,3 +8,18 @@ compatible with [AdvantageScope](https://docs.advantagescope.org).
  
 It is inspired by [AdvantageKit](https://docs.advantagekit.org),
 and written from the ground up in Kotlin.
+
+## Installation
+Chrono is currently deployed with [Jitpack](https://jitpack.io). To install it, add Jitpack to your
+maven repositories block, and add Chrono to your dependencies:
+
+```groovy
+repositories {
+    maven { url = "https://jitpack.io" }
+}
+
+dependencies {
+    // Other dependencies
+    implementation 'com.blazedeveloper:chrono:v0.1.1'
+}
+```
