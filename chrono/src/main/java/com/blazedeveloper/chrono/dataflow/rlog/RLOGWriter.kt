@@ -31,14 +31,14 @@ class RLOGWriter(private val filenameOverride: String? = null) : LogReceiver {
                 createNewFile()
             } catch(e: Exception) {
                 println("""
-                    [RLOGWriter] Error opening file! Data WILL NOT be logged!
+                    [Chrono] Error opening RLOG file! Data WILL NOT be logged!
                     ${e.stackTraceToString()}
                 """.trimIndent())
                 return
             }
         }
 
-        println("[RLOGWriter] Starting log writer on ${file.absolutePath}")
+        println("[Chrono] Starting RLOG writer on ${file.absolutePath}")
 
         outputStream = file.outputStream()
     }
@@ -51,7 +51,7 @@ class RLOGWriter(private val filenameOverride: String? = null) : LogReceiver {
         try {
             stream.write(encoder.output.array())
         } catch(e: Exception) {
-            println("[RLOGWriter] Error writing table to log! Subsequent data will NOT be logged.")
+            println("[Chrono] Error writing table to RLOG file! Subsequent data will NOT be saved.")
             e.printStackTrace()
             outputStream = null
         }
