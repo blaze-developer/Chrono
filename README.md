@@ -6,8 +6,7 @@ Chrono can write data to log files, and live telemetry streams both using the
 [RLOG format](https://github.com/Mechanical-Advantage/AdvantageKit/blob/main/RLOG-SPEC.md) 
 compatible with [AdvantageScope](https://docs.advantagescope.org).
  
-It is inspired by [AdvantageKit](https://docs.advantagekit.org),
-and written from the ground up in Kotlin.
+It is inspired by [AdvantageKit](https://docs.advantagekit.org), and written from the ground up in Kotlin.
 
 ## Installation
 Chrono is currently deployed with [Jitpack](https://jitpack.io). To install it, add Jitpack to your
@@ -23,3 +22,14 @@ dependencies {
     implementation 'com.blazedeveloper:chrono:v0.1.1'
 }
 ```
+
+Setup instructions can be found [here](docs/SETUP.md).
+
+## Disclaimer
+While the infrastructure for log replay is entirely in place, currently I do not know how to
+find an entry point for actually *running* a log replay.
+
+In Chrono's current state, it is just a logging library, but once a suitable entry point for running
+robot code on a programmer's computer arises, log replay will be fully supported.
+
+If you have any suggestions, message me, or write a github issue. Thank you.
