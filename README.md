@@ -8,6 +8,9 @@ compatible with [AdvantageScope](https://docs.advantagescope.org).
  
 It is inspired by [AdvantageKit](https://docs.advantagekit.org), and written from the ground up in Kotlin.
 
+For more information about log replay, check out the great documentation for AdvantageKit written by
+FRC 6328 [here](https://docs.advantagekit.org/getting-started/what-is-advantagekit).
+
 ## Installation
 Chrono is currently deployed with [Jitpack](https://jitpack.io). To install it, add Jitpack to your
 maven repositories block, and add Chrono to your dependencies:
