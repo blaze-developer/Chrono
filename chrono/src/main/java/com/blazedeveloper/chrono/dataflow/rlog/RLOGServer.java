@@ -44,7 +44,7 @@ public class RLOGServer implements LogReceiver {
     public void start() {
         thread = new ServerThread(port);
         thread.start();
-        System.out.println("[AdvantageKit] RLOG server started on port " + port);
+        System.out.println("[Chrono] RLOG server started on port " + port);
     }
 
     public void stop() {
@@ -87,7 +87,7 @@ public class RLOGServer implements LogReceiver {
         List<Double> lastHeartbeats = new ArrayList<>();
 
         public ServerThread(int port) {
-            super("AdvantageKit_RLOGServer");
+            super("Chrono_RLOGServer");
             this.setDaemon(true);
             try {
                 server = new ServerSocket(port);
@@ -103,7 +103,7 @@ public class RLOGServer implements LogReceiver {
 
             // Start broadcast thread
             broadcastThread = new Thread(this::runBroadcast);
-            broadcastThread.setName("AdvantageKit_RLOGServerBroadcast");
+            broadcastThread.setName("Chrono_RLOGServerBroadcast");
             broadcastThread.setDaemon(true);
             broadcastThread.start();
 
@@ -121,7 +121,7 @@ public class RLOGServer implements LogReceiver {
                         lastHeartbeats.add(System.nanoTime() / 1_000_000_000.0);
                     }
                     System.out.println(
-                            "[AdvantageKit] Connected to RLOG client - "
+                            "[Chrono] Connected to RLOG server client - "
                                     + socket.getInetAddress().getHostAddress());
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -188,7 +188,7 @@ public class RLOGServer implements LogReceiver {
 
         private void printDisconnectMessage(Socket socket, String reason) {
             System.out.println(
-                    "Disconnected from RLOG client ("
+                    "[Chrono] Disconnected from RLOG server client ("
                             + reason
                             + ") - "
                             + socket.getInetAddress().getHostAddress());
