@@ -24,7 +24,7 @@ init {
 
 In both Java, receivers can be added using ``Logger.addReceiver``, like this:
 ```java
-YourOpMode() {
+public YourOpMode() {
     Logger.addReceiver(new RLOGServer());
 }
 ```
@@ -57,7 +57,7 @@ init {
 
 Or in Java:
 ```java
-YourOpMode() {
+public YourOpMode() {
     Logger.addMetadata("FTCYear", "2025");
 }
 ```
