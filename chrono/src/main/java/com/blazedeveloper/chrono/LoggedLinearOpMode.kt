@@ -8,13 +8,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 
 abstract class LoggedLinearOpMode : LinearOpMode() {
     /** Provides a deterministic and replayable replacement for [opModeIsActive] */
-    protected val isActive get() = opmodeInputs.isActive
+    protected val isActive @JvmName("isActive") get() = opmodeInputs.isActive
 
     /** Provides a deterministic and replayable replacement for [opModeInInit] */
-    protected val inInit get() = opmodeInputs.inInit
+    protected val inInit @JvmName("inInit") get() = opmodeInputs.inInit
 
     /** Provides a deterministic and replayable replacement for [isStopRequested] */
-    protected val shouldStop get() = opmodeInputs.stopRequested
+    protected val shouldStop @JvmName("shouldStop") get() = opmodeInputs.stopRequested
 
     /** Whether or not we are in the first log cycle. */
     private var isFirstCycle = true
@@ -31,7 +31,7 @@ abstract class LoggedLinearOpMode : LinearOpMode() {
 
         /**
          * Run the user code.
-         * The first log cycle is ended is ended upon the first user log cycle.
+         * The first log cycle is ended upon the first user log cycle.
          */
         runLoggedOpMode()
 
@@ -39,31 +39,40 @@ abstract class LoggedLinearOpMode : LinearOpMode() {
     }
 
     /** Waits until the OpMode is active using deterministic data. */
-    override fun waitForStart() { while (!isActive) loggedCycle() }
+    override fun waitForStart() { logCycle() }
 
     /**
-     * This NEEDS TO BE USED to wrap robot code iterations, e.g. loops on [isActive] or [inInit].
+     * A convenience method to wrap robot code iterations, e.g. loops on [isActive] or [inInit].
      * Using this to wrap your cycles automatically runs logger lifecycle methods and
      * ensures that data is logged and replayed properly.
      */
-    fun loggedCycle(userCode: () -> Unit = {}) {
+    protected fun logCycle(userCode: () -> Unit = {}) {
+        preCycleManual()
+        userCode()
+        postCycleManual()
+    }
+
+    /** Handles updating inputs and Logger methods. Called before user iterations. */
+    @JvmName("preCycle")
+    fun preCycleManual() {
         // If this is the very first robot cycle, end the init cycle and log its data.
         if (isFirstCycle) {
             Logger.postUser()
             isFirstCycle = false
         }
-
         Logger.preUser()
         updateOpModeInputs()
-        userCode()
-        Logger.postUser()
     }
+
+    /** Handles ending the log cycle. Called after user iterations. */
+    @JvmName("postCycle")
+    fun postCycleManual() = Logger.postUser()
 
     /**
      * Properly updates, and processes deterministic lifecycle inputs:
      * [inInit], [isActive], [shouldStop], and gamepad input.
      * Ensure you call this, and Logger lifecycle methods in robot iterations if not using
-     * convenience method [loggedCycle] that call this automatically.
+     * convenience method [logCycle] that call this automatically.
      */
     protected fun updateOpModeInputs() {
         if (!Logger.hasReplaySource) {
