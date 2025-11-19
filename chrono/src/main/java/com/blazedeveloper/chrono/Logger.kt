@@ -109,6 +109,7 @@ object Logger {
     }
 
     /** Processes an input for this loop, either logging or replaying from the table. **/
+    @JvmStatic
     fun processInputs(subtableName: String, inputs: LoggableInputs) {
         if(hasReplaySource) {
             inputs.fromLog(table.subtable(subtableName))
@@ -134,12 +135,12 @@ object Logger {
         logReceivers.forEach { it.receive(tableToReceive) }
     }
 
-    fun output(key: String, value: String) = outputTable.put(key, value)
-    fun output(key: String, value: Boolean) = outputTable.put(key, value)
-    fun output(key: String, value: Int) = outputTable.put(key, value)
-    fun output(key: String, value: Long) = outputTable.put(key, value)
-    fun output(key: String, value: Float) = outputTable.put(key, value)
-    fun output(key: String, value: Double) = outputTable.put(key, value)
-    fun output(key: String, value: ByteArray) = outputTable.put(key, value)
-    fun output(key: String, value: DoubleArray) = outputTable.put(key, value)
+    @JvmStatic fun output(key: String, value: String) = outputTable.put(key, value)
+    @JvmStatic fun output(key: String, value: Boolean) = outputTable.put(key, value)
+    @JvmStatic fun output(key: String, value: Int) = outputTable.put(key, value)
+    @JvmStatic fun output(key: String, value: Long) = outputTable.put(key, value)
+    @JvmStatic fun output(key: String, value: Float) = outputTable.put(key, value)
+    @JvmStatic fun output(key: String, value: Double) = outputTable.put(key, value)
+    @JvmStatic fun output(key: String, value: ByteArray) = outputTable.put(key, value)
+    @JvmStatic fun output(key: String, value: DoubleArray) = outputTable.put(key, value)
 }

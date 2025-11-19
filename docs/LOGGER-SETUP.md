@@ -22,7 +22,7 @@ init {
 }
 ```
 
-In both Java, receivers can be added using ``Logger.addReceiver``, like this:
+In Java, receivers can be added like this in your constructor:
 ```java
 public YourOpMode() {
     Logger.addReceiver(new RLOGServer());
