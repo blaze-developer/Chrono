@@ -12,22 +12,20 @@ import kotlin.time.TimeSource.Monotonic
 import kotlin.time.measureTime
 
 object Logger {
-    private val table: LogTable = LogTable()
+    // Initialize tables to placeholders before start()
+    private var table = LogTable()
+    private var outputTable = LogTable()
+    private var timings: LogTable = LogTable()
+
     private val logReceivers = mutableListOf<LogReceiver>()
     private val metadataPairs = mutableListOf<Pair<String, String>>()
-
     var replaySource: ReplaySource? = null
     val hasReplaySource: Boolean get() = replaySource != null
 
-    private val outputTable by lazy {
-        table.subtable(if (!hasReplaySource) "RealOutputs" else "ReplayOutputs")
-    }
-
-    private val timings by lazy { outputTable.subtable("LoggerTimings") }
-
-    private val loggerStart by lazy { Monotonic.markNow() }
-    private lateinit var cycleStart: TimeMark
-    private lateinit var timeBeforeUser: TimeMark
+    // Initialize timings to placeholders before start()
+    private var loggerStart: TimeMark = Monotonic.markNow()
+    private var cycleStart: TimeMark = Monotonic.markNow()
+    private var timeBeforeUser: TimeMark = Monotonic.markNow()
 
     fun interface Addable<T> {
         fun add(toAdd: T)
@@ -66,11 +64,16 @@ object Logger {
     fun start() {
         ConsoleLogger.start()
 
+        // Initialize values for this run.
+        table = LogTable()
+        outputTable = table.subtable(if (!hasReplaySource) "RealOutputs" else "ReplayOutputs")
+        timings = outputTable.subtable("LoggerTimings")
+        loggerStart = Monotonic.markNow()
+
         val metadataTable = table.subtable(
             if (!hasReplaySource) "RealMetadata"
             else "ReplayMetadata"
         )
-
         metadataPairs.forEach { (key, value) -> metadataTable.put(key, value) }
 
         logReceivers.forEach { it.start() }
@@ -80,17 +83,20 @@ object Logger {
 
     /** Stops the Logger, its receivers, and sources.*/
     fun stop() {
-        ConsoleLogger.stop()
-
         logReceivers.forEach { it.stop() }
-
         replaySource?.stop()
+
+        // Reset the logger for the next run.
+        logReceivers.clear()
+        metadataPairs.clear()
+        replaySource = null
+
+        ConsoleLogger.stop()
     }
 
     /** Sets up the table for this cycle. Runs before user code. **/
     fun preUser() {
         cycleStart = Monotonic.markNow()
-
 
         if (hasReplaySource) {
             // Update table from the replay source, end if the source ends.
