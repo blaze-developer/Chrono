@@ -12,6 +12,7 @@ import com.blazedeveloper.chrono.structure.LogTable;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
@@ -23,6 +24,8 @@ public class RLOGServer implements LogReceiver {
     private final int port;
     private ServerThread thread;
     private RLOGEncoder encoder = new RLOGEncoder();
+
+    private boolean running = false;
 
     private static Object encoderLock = new Object();
     private static Object socketsLock = new Object();
@@ -42,12 +45,15 @@ public class RLOGServer implements LogReceiver {
     }
 
     public void start() {
+        running = true;
         thread = new ServerThread(port);
         thread.start();
         System.out.println("[Chrono] RLOG server started on port " + port);
     }
 
     public void stop() {
+        System.out.println("[RLOGServer] Stopping...");
+        running = false;
         if (thread != null) {
             thread.close();
             thread = null;
@@ -62,7 +68,7 @@ public class RLOGServer implements LogReceiver {
                 encoder.encodeTable(table, false);
                 data = encodeData(encoder.getOutput().array());
             }
-            thread.broadcastQueue.put(data);
+            thread.broadcastQueue.offer(data);
         }
     }
 
@@ -90,7 +96,9 @@ public class RLOGServer implements LogReceiver {
             super("Chrono_RLOGServer");
             this.setDaemon(true);
             try {
-                server = new ServerSocket(port);
+                server = new ServerSocket();
+                server.setReuseAddress(true);
+                server.bind(new InetSocketAddress(port));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -108,7 +116,7 @@ public class RLOGServer implements LogReceiver {
             broadcastThread.start();
 
             // Wait for clients
-            while (true) {
+            while (running) {
                 try {
                     Socket socket = server.accept();
                     byte[] data;
@@ -124,13 +132,17 @@ public class RLOGServer implements LogReceiver {
                             "[Chrono] Connected to RLOG server client - "
                                     + socket.getInetAddress().getHostAddress());
                 } catch (IOException e) {
+                    if (!running) {
+                        System.out.println("[Chrono] RLOG server successfully stopped.");
+                        return;
+                    }
                     e.printStackTrace();
                 }
             }
         }
 
         public void runBroadcast() {
-            while (true) {
+            while (running) {
                 try {
                     Thread.sleep(20);
                 } catch (InterruptedException e) {

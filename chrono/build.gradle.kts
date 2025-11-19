@@ -44,7 +44,7 @@ publishing {
         register<MavenPublication>("release") {
             groupId = "com.blazedeveloper"
             artifactId = "chrono"
-            version = "0.1.1"
+            version = "dev"
 
             afterEvaluate {
                 from(components["release"])
