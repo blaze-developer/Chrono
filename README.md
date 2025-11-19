@@ -27,7 +27,15 @@ dependencies {
 }
 ```
 
-Setup instructions can be found [here](docs/SETUP.md).
+## Documentation
+
+The following documentation pages are available:
+
+ - [Linear Opmode Setup](./docs/OPMODE-SETUP.md)
+ - [Logger Setup](./docs/LOGGER-SETUP.md)
+
+For understanding the theoretical idea of **log replay** or **deterministic logging**, refer
+to FRC 6328's documentation on AdvantageKit [here](https://docs.advantagekit.org).
 
 ## Disclaimer
 While the infrastructure for log replay is entirely in place, currently I do not know how to

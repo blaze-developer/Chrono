@@ -38,7 +38,17 @@ object Logger {
      * The synchronized timestamp of the current cycle,
      * this should be used for all replayed logic as it is deterministic and replayable.
      **/
+    @get:JvmName("timestamp")
+    @get:JvmStatic
     val timestamp: Duration get() = table.timestamp
+
+    /** Adds metadata to be logged to the table when the Logger is started. */
+    @JvmStatic
+    fun addMetadata(key: String, value: String) { metadataPairs += key to value }
+
+    /** Adds a receiver to the Logger */
+    @JvmStatic
+    fun addReceiver(receiver: LogReceiver) { logReceivers += receiver }
 
     /**
      * Object that user can add log receivers to that accept log

@@ -4,6 +4,9 @@ This is how you set up a Chrono linear opmode in Kotlin.
 After installing, make a linear opmode that extends from ``LoggedLinearOpMode``, and implement the
 ``startLoggedOpMode()`` function.
 
+**Examples of setup can be found [here](./examples/KOTLIN.md) for Kotlin and
+[here](./examples/JAVA.md) for Java.**
+
 ## Loops
 The ''Logger'' has ``preUser`` and ``postUser`` methods that must be called before and after user code for every robot iteration.
 This is necessary for handling the log table, replay sources, timestamps, and log receivers.
@@ -13,10 +16,6 @@ automatically handles Logger iterations, and built-in data logging. For Java, th
 call ``preCycle`` and ``postCycle``, as the ``logCycle`` helper may look a little verbose.
 
 It should be used in your main control-flow loops, like a top level while loop.
-
-Examples:
- - [Java](./examples/JAVA.md)
- - [Kotlin](./examples/KOTLIN.md)
 
 ## Deterministic Inputs
 Chrono handles and logs a few built-in inputs, including [synchronized timestamps](https://docs.advantagekit.org/data-flow/deterministic-timestamps),
@@ -35,3 +34,8 @@ Gamepads are logged and replayed straight to the same API, so continue using the
 Opmode lifecycle events need to come from a logged and deterministic source to guarantee replay
 accuracy. In your opmodes, ensure that you always use members ``isActive``, ``inInit``, and``shouldStop``
 as opposed to the methods ``opModeIsActive``, ``opModeInInit``, and ``isStopRequested``.
+
+## Automatic Outputs
+Along with the automatic inputs, Chrono automatically logs a few outputs as well. Including Logger
+and Opmode loop timings under "LoggerTimings", and captured console data from ``System.out`` and
+``System.err`` [viewable in AdvantageScope](https://docs.advantagescope.org/tab-reference/console).
