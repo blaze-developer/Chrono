@@ -8,13 +8,16 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 
 abstract class LoggedLinearOpMode : LinearOpMode() {
     /** Provides a deterministic and replayable replacement for [opModeIsActive] */
-    protected val isActive @JvmName("isActive") get() = opmodeInputs.isActive
+    @get:JvmName("isActive")
+    protected val isActive get() = opmodeInputs.isActive
 
     /** Provides a deterministic and replayable replacement for [opModeInInit] */
-    protected val inInit @JvmName("inInit") get() = opmodeInputs.inInit
+    @get:JvmName("inInit")
+    protected val inInit get() = opmodeInputs.inInit
 
     /** Provides a deterministic and replayable replacement for [isStopRequested] */
-    protected val shouldStop @JvmName("shouldStop") get() = opmodeInputs.stopRequested
+    @get:JvmName("shouldStop")
+    protected val shouldStop get() = opmodeInputs.stopRequested
 
     /** Whether or not we are in the first log cycle. */
     private var isFirstCycle = true
