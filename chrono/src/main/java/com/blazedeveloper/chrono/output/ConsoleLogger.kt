@@ -52,6 +52,11 @@ internal object ConsoleLogger {
     fun stop() {
         System.setOut(systemOut)
         System.setErr(systemErr)
+
+        capturedOut.reset()
+        capturedErr.reset()
+        outBytesLogged = 0
+        errBytesLogged = 0
     }
 
     private class ParallelOutputStream(private vararg val streams: OutputStream) : OutputStream() {
