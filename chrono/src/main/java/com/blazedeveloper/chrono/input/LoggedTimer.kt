@@ -1,6 +1,7 @@
 package com.blazedeveloper.chrono.input
 
 import com.blazedeveloper.chrono.Logger
+import java.util.Locale
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
 
@@ -34,5 +35,5 @@ class LoggedTimer(
     fun log() = println("[LoggedTimer] ELAPSED: $this")
 
     /** Gets a string representation of the time elapsed in seconds. */
-    override fun toString() = String.format("$.4f seconds", seconds)
+    override fun toString() = String.format(Locale.US, "%.4f seconds", seconds)
 }
