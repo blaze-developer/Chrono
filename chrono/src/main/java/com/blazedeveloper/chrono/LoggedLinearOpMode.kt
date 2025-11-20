@@ -1,5 +1,6 @@
 package com.blazedeveloper.chrono
 
+import com.blazedeveloper.chrono.input.LoggedTimer
 import com.blazedeveloper.chrono.input.replayFromTable
 import com.blazedeveloper.chrono.input.writeToTable
 import com.blazedeveloper.chrono.structure.LogTable
@@ -21,6 +22,18 @@ abstract class LoggedLinearOpMode : LinearOpMode() {
 
     /** Whether or not we are in the first log cycle. */
     private var isFirstCycle = true
+
+    /** The runtime timer. */
+    private val runtime = LoggedTimer()
+
+    /**
+     * Gets the number of seconds since this opmode
+     * has been running using deterministic timestamps.
+     */
+    override fun getRuntime() = runtime.seconds
+
+    /** Resets the deterministic runtime to zero. */
+    override fun resetRuntime() = runtime.reset()
 
     /** Override this method and place your code here. */
     abstract fun runLoggedOpMode()
