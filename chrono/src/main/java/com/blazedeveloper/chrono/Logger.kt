@@ -12,20 +12,22 @@ import kotlin.time.TimeSource.Monotonic
 import kotlin.time.measureTime
 
 object Logger {
-    // Initialize tables to placeholders before start()
-    private var table = LogTable()
-    private var outputTable = LogTable()
-    private var timings: LogTable = LogTable()
+    private lateinit var table: LogTable
+    private lateinit var outputsTable: LogTable
+    private lateinit var metadataTable: LogTable
+    private lateinit var timingsTable: LogTable
 
     private val logReceivers = mutableListOf<LogReceiver>()
     private val metadataPairs = mutableListOf<Pair<String, String>>()
     var replaySource: ReplaySource? = null
     val hasReplaySource: Boolean get() = replaySource != null
 
-    // Initialize timings to placeholders before start()
-    private var loggerStart: TimeMark = Monotonic.markNow()
-    private var cycleStart: TimeMark = Monotonic.markNow()
-    private var timeBeforeUser: TimeMark = Monotonic.markNow()
+    private lateinit var loggerStart: TimeMark
+    private lateinit var cycleStart: TimeMark
+    private lateinit var timeBeforeUser: TimeMark
+
+    private var running = false
+    private fun ifRunning(block: () -> Unit) { if(running) block() }
 
     fun interface Addable<T> {
         fun add(toAdd: T)
@@ -61,19 +63,20 @@ object Logger {
     val metadata = Addable<Pair<String, String>> { metadataPairs += it }
 
     /** Starts the Logger, its receivers, and sources. */
-    fun start() {
+    internal fun start() {
+        if (running) return
+        running = true
+
         ConsoleLogger.start()
 
         // Initialize values for this run.
         table = LogTable()
-        outputTable = table.subtable(if (!hasReplaySource) "RealOutputs" else "ReplayOutputs")
-        timings = outputTable.subtable("LoggerTimings")
+        outputsTable = table.subtable(if (!hasReplaySource) "RealOutputs" else "ReplayOutputs")
+        metadataTable = table.subtable(if (!hasReplaySource) "RealMetadata" else "ReplayMetadata")
+        timingsTable = outputsTable.subtable("LoggerTimings")
         loggerStart = Monotonic.markNow()
 
-        val metadataTable = table.subtable(
-            if (!hasReplaySource) "RealMetadata"
-            else "ReplayMetadata"
-        )
+        // Log metadata
         metadataPairs.forEach { (key, value) -> metadataTable.put(key, value) }
 
         logReceivers.forEach { it.start() }
@@ -82,7 +85,10 @@ object Logger {
     }
 
     /** Stops the Logger, its receivers, and sources.*/
-    fun stop() {
+    internal fun stop() {
+        if (!running) return
+        running = false
+
         logReceivers.forEach { it.stop() }
         replaySource?.stop()
 
@@ -95,7 +101,7 @@ object Logger {
     }
 
     /** Sets up the table for this cycle. Runs before user code. **/
-    fun preUser() {
+    internal fun preUser() = ifRunning {
         cycleStart = Monotonic.markNow()
 
         if (hasReplaySource) {
@@ -106,7 +112,7 @@ object Logger {
                     exitProcess(0)
                 }
             }
-            timings.put("TableReadNS", tableReadTime.inWholeNanoseconds)
+            timingsTable.put("TableReadNS", tableReadTime.inWholeNanoseconds)
         } else {
             table.timestamp = loggerStart.elapsedNow()
         }
@@ -116,7 +122,7 @@ object Logger {
 
     /** Processes an input for this loop, either logging or replaying from the table. **/
     @JvmStatic
-    fun processInputs(subtableName: String, inputs: LoggableInputs) {
+    fun processInputs(subtableName: String, inputs: LoggableInputs) = ifRunning {
         if(hasReplaySource) {
             inputs.fromLog(table.subtable(subtableName))
         } else {
@@ -125,28 +131,28 @@ object Logger {
     }
 
     /** Sends data to receivers. Runs after user code. **/
-    fun postUser() {
+    internal fun postUser() = ifRunning {
         ConsoleLogger.log()
 
         val userCodeTime = timeBeforeUser.elapsedNow()
-        timings.put("UserCodeNS", userCodeTime.inWholeNanoseconds)
+        timingsTable.put("UserCodeNS", userCodeTime.inWholeNanoseconds)
 
         // Record Timings
         val fullCycleTime = cycleStart.elapsedNow()
         val loggerCycleTime = fullCycleTime - userCodeTime
-        timings.put("FullCycleNS", fullCycleTime.inWholeNanoseconds)
-        timings.put("LoggerCycleNS", loggerCycleTime.inWholeNanoseconds)
+        timingsTable.put("FullCycleNS", fullCycleTime.inWholeNanoseconds)
+        timingsTable.put("LoggerCycleNS", loggerCycleTime.inWholeNanoseconds)
 
         val tableToReceive = table.clone()
         logReceivers.forEach { it.receive(tableToReceive) }
     }
 
-    @JvmStatic fun output(key: String, value: String) = outputTable.put(key, value)
-    @JvmStatic fun output(key: String, value: Boolean) = outputTable.put(key, value)
-    @JvmStatic fun output(key: String, value: Int) = outputTable.put(key, value)
-    @JvmStatic fun output(key: String, value: Long) = outputTable.put(key, value)
-    @JvmStatic fun output(key: String, value: Float) = outputTable.put(key, value)
-    @JvmStatic fun output(key: String, value: Double) = outputTable.put(key, value)
-    @JvmStatic fun output(key: String, value: ByteArray) = outputTable.put(key, value)
-    @JvmStatic fun output(key: String, value: DoubleArray) = outputTable.put(key, value)
+    @JvmStatic fun output(key: String, value: String) = ifRunning { outputsTable.put(key, value) }
+    @JvmStatic fun output(key: String, value: Boolean) = ifRunning { outputsTable.put(key, value) }
+    @JvmStatic fun output(key: String, value: Int) = ifRunning { outputsTable.put(key, value) }
+    @JvmStatic fun output(key: String, value: Long) = ifRunning { outputsTable.put(key, value) }
+    @JvmStatic fun output(key: String, value: Float) = ifRunning { outputsTable.put(key, value) }
+    @JvmStatic fun output(key: String, value: Double) = ifRunning { outputsTable.put(key, value) }
+    @JvmStatic fun output(key: String, value: ByteArray) = ifRunning { outputsTable.put(key, value) }
+    @JvmStatic fun output(key: String, value: DoubleArray) = ifRunning { outputsTable.put(key, value) }
 }
