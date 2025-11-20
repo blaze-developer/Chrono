@@ -7,6 +7,7 @@ import com.blazedeveloper.chrono.structure.LogTable
 import com.blazedeveloper.chrono.structure.LoggableInputs
 import kotlin.system.exitProcess
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.nanoseconds
 import kotlin.time.TimeMark
 import kotlin.time.TimeSource.Monotonic
 import kotlin.time.measureTime
@@ -28,6 +29,7 @@ object Logger {
 
     private var running = false
     private fun ifRunning(block: () -> Unit) { if(running) block() }
+    private fun ifStopped(block: () -> Unit) { if(!running) block() }
 
     fun interface Addable<T> {
         fun add(toAdd: T)
@@ -37,34 +39,34 @@ object Logger {
     /**
      * The synchronized timestamp of the current cycle,
      * this should be used for all replayed logic as it is deterministic and replayable.
+     * If the logger is not running, returns 0.
      **/
     @get:JvmName("timestamp")
     @get:JvmStatic
-    val timestamp: Duration get() = table.timestamp
+    val timestamp: Duration get() = if (running) table.timestamp else Duration.ZERO
 
     /** Adds metadata to be logged to the table when the Logger is started. */
     @JvmStatic
-    fun addMetadata(key: String, value: String) { metadataPairs += key to value }
+    fun addMetadata(key: String, value: String) = ifStopped { metadataPairs += key to value }
 
     /** Adds a receiver to the Logger */
     @JvmStatic
-    fun addReceiver(receiver: LogReceiver) { logReceivers += receiver }
+    fun addReceiver(receiver: LogReceiver) = ifStopped { logReceivers += receiver }
 
     /**
      * Object that user can add log receivers to that accept log
      * data from the Logger and use for streaming, logfiles, etc.
      */
-    val receivers = Addable<LogReceiver> { logReceivers += it }
+    val receivers = Addable<LogReceiver> { addReceiver(it) }
 
     /**
      * Maps log metadata names to values to be put into the table when
      * the Logger is started.
      */
-    val metadata = Addable<Pair<String, String>> { metadataPairs += it }
+    val metadata = Addable<Pair<String, String>> { addMetadata(it.first, it.second) }
 
     /** Starts the Logger, its receivers, and sources. */
-    internal fun start() {
-        if (running) return
+    internal fun start() = ifStopped {
         running = true
 
         ConsoleLogger.start()
@@ -82,22 +84,6 @@ object Logger {
         logReceivers.forEach { it.start() }
 
         replaySource?.start()
-    }
-
-    /** Stops the Logger, its receivers, and sources.*/
-    internal fun stop() {
-        if (!running) return
-        running = false
-
-        logReceivers.forEach { it.stop() }
-        replaySource?.stop()
-
-        // Reset the logger for the next run.
-        logReceivers.clear()
-        metadataPairs.clear()
-        replaySource = null
-
-        ConsoleLogger.stop()
     }
 
     /** Sets up the table for this cycle. Runs before user code. **/
@@ -130,6 +116,16 @@ object Logger {
         }
     }
 
+    // Output methods for user code to publish output data.
+    @JvmStatic fun output(key: String, value: String) = ifRunning { outputsTable.put(key, value) }
+    @JvmStatic fun output(key: String, value: Boolean) = ifRunning { outputsTable.put(key, value) }
+    @JvmStatic fun output(key: String, value: Int) = ifRunning { outputsTable.put(key, value) }
+    @JvmStatic fun output(key: String, value: Long) = ifRunning { outputsTable.put(key, value) }
+    @JvmStatic fun output(key: String, value: Float) = ifRunning { outputsTable.put(key, value) }
+    @JvmStatic fun output(key: String, value: Double) = ifRunning { outputsTable.put(key, value) }
+    @JvmStatic fun output(key: String, value: ByteArray) = ifRunning { outputsTable.put(key, value) }
+    @JvmStatic fun output(key: String, value: DoubleArray) = ifRunning { outputsTable.put(key, value) }
+
     /** Sends data to receivers. Runs after user code. **/
     internal fun postUser() = ifRunning {
         ConsoleLogger.log()
@@ -147,12 +143,18 @@ object Logger {
         logReceivers.forEach { it.receive(tableToReceive) }
     }
 
-    @JvmStatic fun output(key: String, value: String) = ifRunning { outputsTable.put(key, value) }
-    @JvmStatic fun output(key: String, value: Boolean) = ifRunning { outputsTable.put(key, value) }
-    @JvmStatic fun output(key: String, value: Int) = ifRunning { outputsTable.put(key, value) }
-    @JvmStatic fun output(key: String, value: Long) = ifRunning { outputsTable.put(key, value) }
-    @JvmStatic fun output(key: String, value: Float) = ifRunning { outputsTable.put(key, value) }
-    @JvmStatic fun output(key: String, value: Double) = ifRunning { outputsTable.put(key, value) }
-    @JvmStatic fun output(key: String, value: ByteArray) = ifRunning { outputsTable.put(key, value) }
-    @JvmStatic fun output(key: String, value: DoubleArray) = ifRunning { outputsTable.put(key, value) }
+    /** Stops the Logger, its receivers, and sources.*/
+    internal fun stop() = ifRunning {
+        running = false
+
+        logReceivers.forEach { it.stop() }
+        replaySource?.stop()
+
+        // Reset the logger for the next run.
+        logReceivers.clear()
+        metadataPairs.clear()
+        replaySource = null
+
+        ConsoleLogger.stop()
+    }
 }
