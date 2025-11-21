@@ -15,7 +15,6 @@ import kotlin.time.measureTime
 object Logger {
     private lateinit var table: LogTable
     private lateinit var outputsTable: LogTable
-    private lateinit var metadataTable: LogTable
     private lateinit var timingsTable: LogTable
 
     private val logReceivers = mutableListOf<LogReceiver>()
@@ -26,6 +25,10 @@ object Logger {
     private lateinit var loggerStart: TimeMark
     private lateinit var cycleStart: TimeMark
     private lateinit var timeBeforeUser: TimeMark
+
+    internal var enabledKey: String? = null
+    internal var autoKey: String? = null
+    internal var joystickKey: String? = null
 
     private var running = false
     private fun ifRunning(block: () -> Unit) { if(running) block() }
@@ -74,12 +77,25 @@ object Logger {
         // Initialize values for this run.
         table = LogTable()
         outputsTable = table.subtable(if (!hasReplaySource) "RealOutputs" else "ReplayOutputs")
-        metadataTable = table.subtable(if (!hasReplaySource) "RealMetadata" else "ReplayMetadata")
         timingsTable = outputsTable.subtable("LoggerTimings")
         loggerStart = Monotonic.markNow()
 
         // Log metadata
-        metadataPairs.forEach { (key, value) -> metadataTable.put(key, value) }
+        table.subtable(
+            if (!hasReplaySource) "RealMetadata"
+            else "ReplayMetadata"
+        ).apply {
+            metadataPairs.forEach { (key, value) -> put(key, value) }
+        }
+
+        // Log metadata format
+        table.subtable("LogMetadata").apply {
+            mapOf(
+                "EnabledKey" to enabledKey,
+                "AutoKey" to autoKey,
+                "JoystickKey" to joystickKey
+            ).forEach { (key, value) -> value?.let { put(key, it) } }
+        }
 
         logReceivers.forEach { it.start() }
 
@@ -151,10 +167,17 @@ object Logger {
         replaySource?.stop()
 
         // Reset the logger for the next run.
+        reset()
+
+        ConsoleLogger.stop()
+    }
+
+    private fun reset() {
         logReceivers.clear()
         metadataPairs.clear()
         replaySource = null
-
-        ConsoleLogger.stop()
+        enabledKey = null
+        autoKey = null
+        joystickKey = null
     }
 }
