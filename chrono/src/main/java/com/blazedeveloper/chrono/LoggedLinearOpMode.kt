@@ -96,7 +96,7 @@ abstract class LoggedLinearOpMode : LinearOpMode() {
             opmodeInputs.isActive = opModeIsActive()
             opmodeInputs.stopRequested = isStopRequested
         }
-        Logger.processInputs("Opmode", opmodeInputs)
+        Logger.processInputs("OpMode", opmodeInputs)
     }
 
     private val opmodeInputs = object : LoggableInputs {
