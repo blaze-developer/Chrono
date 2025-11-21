@@ -96,7 +96,7 @@ abstract class LoggedLinearOpMode : LinearOpMode() {
             opmodeInputs.isActive = opModeIsActive()
             opmodeInputs.stopRequested = isStopRequested
         }
-        Logger.processInputs("LoggedOpMode", opmodeInputs)
+        Logger.processInputs("DriverStation", opmodeInputs)
     }
 
     private val opmodeInputs = object : LoggableInputs {
@@ -106,9 +106,9 @@ abstract class LoggedLinearOpMode : LinearOpMode() {
         var stopRequested = false
 
         override fun toLog(table: LogTable) {
-            table.put("isActive", isActive)
-            table.put("inInit", inInit)
-            table.put("stopRequested", stopRequested)
+            table.put("Enabled", isActive)
+            table.put("InInit", inInit)
+            table.put("StopRequested", stopRequested)
 
             val gamepads = table.subtable("Gamepads")
             gamepad1.writeToTable(gamepads, 1)
@@ -116,9 +116,9 @@ abstract class LoggedLinearOpMode : LinearOpMode() {
         }
 
         override fun fromLog(table: LogTable) {
-            isActive = table.get("isActive", isActive)
-            inInit = table.get("inInit", inInit)
-            stopRequested = table.get("stopRequested", stopRequested)
+            isActive = table.get("Enabled", isActive)
+            inInit = table.get("InInit", inInit)
+            stopRequested = table.get("StopRequested", stopRequested)
 
             val gamepads = table.subtable("Gamepads")
             gamepad1.replayFromTable(gamepads, 1)
