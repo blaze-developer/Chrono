@@ -40,6 +40,10 @@ abstract class LoggedLinearOpMode : LinearOpMode() {
 
     /** Handles logger lifecycle methods before calling the user code. */
     final override fun runOpMode() {
+        Logger.enabledKey = "OpMode/Active"
+        Logger.autoKey = "OpMode/IsAuto"
+        Logger.joystickKey = "OpMode/Gamepads"
+
         Logger.start()
 
         Logger.preUser() // Start the very first log cycle, or replay the first table.
