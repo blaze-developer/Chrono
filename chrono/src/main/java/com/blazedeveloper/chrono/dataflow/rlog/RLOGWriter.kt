@@ -14,16 +14,18 @@ class RLOGWriter(private val filenameOverride: String? = null) : LogReceiver {
 
     private val logFolder = AppUtil.ROOT_FOLDER.resolve("logs")
 
-    private val fileNameFormat = SimpleDateFormat("dd-MMM-yyyy_HH-mm-ss", Locale.US)
+    private val dateFormat = SimpleDateFormat("dd-MMM-yyyy_HH-mm-ss", Locale.US)
 
     private fun String.ensureFileExtension(ext: String) =
         if (endsWith(".$ext")) this else "$this.$ext"
 
+    private val generatedName
+        get() = "chrono_${dateFormat.format(Date())}.rlog"
+
     override fun start() {
         if (!logFolder.exists()) logFolder.mkdirs()
 
-        val fileName = filenameOverride ?: fileNameFormat.format(Date())
-            .ensureFileExtension("rlog")
+        val fileName = filenameOverride?.ensureFileExtension("rlog") ?: generatedName
 
         val file = logFolder.resolve(fileName).apply {
             try {
