@@ -67,8 +67,6 @@ object Logger {
 
     /** Starts the Logger, its receivers, and sources. */
     internal fun start() = ifStopped {
-        running = true
-
         ConsoleLogger.start()
 
         // Initialize values for this run.
@@ -84,6 +82,15 @@ object Logger {
         logReceivers.forEach { it.start() }
 
         replaySource?.start()
+
+        running = true
+
+        println("""
+            [Chrono] Logger started!
+             - ${logReceivers.size} receivers
+             - ${metadataPairs.size} lines of metadata 
+             - replaying: ${hasReplaySource}
+        """.trimIndent())
     }
 
     /** Sets up the table for this cycle. Runs before user code. **/
@@ -145,6 +152,7 @@ object Logger {
 
     /** Stops the Logger, its receivers, and sources.*/
     internal fun stop() = ifRunning {
+        println("[Chrono] Logger stopping...")
         running = false
 
         logReceivers.forEach { it.stop() }
