@@ -83,6 +83,12 @@ class LogTable @JvmOverloads constructor(
     /** Puts a [value] into the table at a specified [key]. */
     fun put(key: String, value: Array<String>) = put(key, value.asLogValue())
 
+    /** Puts an enum [value] represented by a string into the table at a specified [key] */
+    fun <E : Enum<E>> put(key: String, value: E) = put(key, value.name)
+
+    /** Puts an enum array [value] represented by a string into the table at a specified [key] */
+    fun <E : Enum<E>> put(key: String, value: Array<E>) = put(key, value.map { it.name }.toTypedArray())
+
     /**
      * Gets a raw LogValue from the table at the specified [key].
      * If the data does not exist or is of the wrong type,
@@ -197,4 +203,19 @@ class LogTable @JvmOverloads constructor(
     @Suppress("UNCHECKED_CAST")
     fun get(key: String, default: Array<String>) =
         get(key, default.asLogValue()).value as Array<String>
+
+    /** Gets an enum item from the table at the specified [key],
+     * If the data does not exist or is of the wrong type,
+     * the [default] is returned.
+     */
+    inline fun <reified E : Enum<E>> get(key: String, default: E) =
+        enumValueOf<E>(get(key, default.name))
+
+    /**
+     * Gets an enum array item from the table at the specified [key],
+     * If the data does not exist or is of the wrong type,
+     * the [default] is returned.
+     */
+    inline fun <reified E: Enum<E>> get(key: String, default: Array<E>) =
+        get(key, default.map { it.name }.toTypedArray()).map { enumValueOf<E>(it) }.toTypedArray()
 }

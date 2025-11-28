@@ -132,6 +132,9 @@ object Logger {
     @JvmStatic fun output(key: String, value: Double) = ifRunning { outputsTable.put(key, value) }
     @JvmStatic fun output(key: String, value: ByteArray) = ifRunning { outputsTable.put(key, value) }
     @JvmStatic fun output(key: String, value: DoubleArray) = ifRunning { outputsTable.put(key, value) }
+    @JvmStatic fun output(key: String, value: Array<String>) = ifRunning { outputsTable.put(key, value) }
+    @JvmStatic fun <E : Enum<E>> output(key: String, value: E) = ifRunning { outputsTable.put(key, value) }
+    @JvmStatic fun <E : Enum<E>> output(key: String, value: Array<E>) = ifRunning { outputsTable.put(key, value) }
 
     /** Sends data to receivers. Runs after user code. **/
     internal fun postUser() = ifRunning {
