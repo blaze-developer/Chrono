@@ -31,7 +31,7 @@ class MyLinearOpMode : LoggedLinearOpMode() {
 ```
 
 </TabItem>
-<TabItem value="java" label="Kotlin">
+<TabItem value="java" label="Java">
 
 Java's lambda syntax may make the logCycle helper look very verbose, so you may call
 ``preCycle`` and ``postCycle`` manually:

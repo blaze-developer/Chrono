@@ -56,10 +56,10 @@ const config: Config = {
     },
     navbar: {
       title: 'Chrono',
-      logo: {
-        alt: 'Chrono Logo',
-        src: 'img/logo.svg',
-      },
+//       logo: {
+//         alt: 'Chrono Logo',
+//         src: 'img/logo.svg',
+//       },
       items: [
         {
           href: 'https://github.com/blaze-developer/chrono',
