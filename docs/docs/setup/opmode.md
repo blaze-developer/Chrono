@@ -24,7 +24,7 @@ It should be used in your main control-flow loops, like a top level while loop.
 
 ## Deterministic Inputs
 Chrono handles and logs a few built-in inputs, including [synchronized timestamps](https://docs.advantagekit.org/data-flow/deterministic-timestamps),
-gamepads, and lifecycle events like opmode init, active, and stop requests.
+gamepads, and events like opmode init, active, and stop requests.
 
 ### Timestamps
 Although Chrono cannot override built in methods like ``System.nanoTime`` with its own time source,
