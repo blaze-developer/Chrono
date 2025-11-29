@@ -5,11 +5,14 @@ sidebar_position: 1
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-You should configure the Logger BEFORE it it started in either an *initializer* (in Kotlin), or your
-*constructor* (in Java). The Logger is automatically started by ``LoggedLinearOpMode`` after
-constructors and initializers.
-
+:::tip
 **Examples of Logger configuration can be found [here](./example).**
+:::
+
+:::warning
+The ``Logger`` should be completely configured, including receivers, replay sources,
+and metadata, BEFORE the ``Logger`` is started automatically at the beginning of ``runLoggedOpMode()``
+:::
 
 ## Log Receivers
 A log receiver is something that accepts the current cycle's logged data, and puts it somewhere
