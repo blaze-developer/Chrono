@@ -4,8 +4,8 @@ This is how you set up a Chrono linear opmode in Kotlin.
 After installing, make a linear opmode that extends from ``LoggedLinearOpMode``, and implement the
 ``startLoggedOpMode()`` function.
 
-**Examples of setup can be found [here](./examples/KOTLIN.md) for Kotlin and
-[here](./examples/JAVA.md) for Java.**
+**Examples of setup can be found [here](examplesOTLIN.md) for Kotlin and
+[here](examplesAVA.md) for Java.**
 
 ## Loops
 The ''Logger'' has ``preUser`` and ``postUser`` methods that must be called before and after user code for every robot iteration.
