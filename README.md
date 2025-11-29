@@ -8,8 +8,7 @@ compatible with [AdvantageScope](https://docs.advantagescope.org).
  
 It is inspired by [AdvantageKit](https://docs.advantagekit.org), and written from the ground up in Kotlin.
 
-For more information about log replay, check out the great documentation for AdvantageKit written by
-FRC 6328 [here](https://docs.advantagekit.org/getting-started/what-is-advantagekit).
+Online documentation can be found [here](https://chrono.blazedeveloper.com).
 
 ## Installation
 Chrono is currently deployed with [Jitpack](https://jitpack.io). To install it, add Jitpack to your
@@ -26,16 +25,6 @@ dependencies {
     implementation 'com.blazedeveloper:chrono:vX.Y.Z'
 }
 ```
-
-## Documentation
-
-The following documentation pages are available:
-
- - [Linear Opmode Setup](./docs/OPMODE-SETUP.md)
- - [Logger Setup](./docs/LOGGER-SETUP.md)
-
-For understanding the theoretical idea of **log replay** or **deterministic logging**, refer
-to FRC 6328's documentation on AdvantageKit [here](https://docs.advantagekit.org).
 
 ## Disclaimer
 While the infrastructure for log replay is entirely in place, currently I do not know how to
