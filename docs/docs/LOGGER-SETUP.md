@@ -3,8 +3,8 @@ You should configure the Logger BEFORE it it started in either an *initializer* 
 *constructor* (in Java). The Logger is automatically started by ``LoggedLinearOpMode`` after
 constructors and initializers.
 
-**Examples of Logger configuration can be found [here](./examples/KOTLIN.md) for Kotlin and
-[here](./examples/JAVA.md) for Java.**
+**Examples of Logger configuration can be found [here](examplesOTLIN.md) for Kotlin and
+[here](examplesAVA.md) for Java.**
 
 ## Log Receivers
 A log receiver is something that accepts the current cycle's logged data, and puts it somewhere
@@ -40,6 +40,7 @@ Some examples of metadata include:
 
 Note that it is entirely up to *you* what metadata you do and don't include in your logs.
 
+:::
 Metadata must be added to the Logger **BEFORE** it is started, in an initializer or constructor.
 Similarly to receivers, it can be added with a += operator in Kotlin, or a method in both Kotlin
 and Java.
