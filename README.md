@@ -8,7 +8,7 @@ compatible with [AdvantageScope](https://docs.advantagescope.org).
  
 It is inspired by [AdvantageKit](https://docs.advantagekit.org), and written from the ground up in Kotlin.
 
-**Online documentation can be found [here](https://chrono.blazedeveloper.com).**
+### **Online documentation can be found [here](https://chrono.blazedeveloper.com).**
 
 ## Installation
 Chrono is currently deployed with [Jitpack](https://jitpack.io). To install it, add Jitpack to your
