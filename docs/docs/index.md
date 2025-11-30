@@ -13,7 +13,7 @@ compatible with [AdvantageScope](https://docs.advantagescope.org).
 
 It is inspired by [AdvantageKit](https://docs.advantagekit.org), and written from the ground up in Kotlin.
 
-:::tip
+:::info
 For a deeper understanding, and more information about **log replay** or **deterministic logging**,
 refer to FRC 6328's documentation on AdvantageKit [here](https://docs.advantagekit.org).
 :::

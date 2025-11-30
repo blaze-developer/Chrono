@@ -3,8 +3,8 @@ title: "Linear Opmode Setup"
 sidebar_position: 2
 ---
 
-:::tip
-Look at our [examples](./example.md)!
+:::info
+Example setups are available [here](./example.md)!
 :::
 
 This is how you set up a Chrono linear opmode.

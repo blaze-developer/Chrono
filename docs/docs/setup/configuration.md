@@ -5,7 +5,7 @@ sidebar_position: 1
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-:::tip
+:::info
 **Examples of Logger configuration can be found [here](./example).**
 :::
 
@@ -17,7 +17,7 @@ and metadata, BEFORE the ``Logger`` is started automatically at the beginning of
 ## Log Receivers
 A log receiver is something that accepts the current cycle's logged data, and puts it somewhere
 like a log file or stream. Receivers currently included in Chrono are ``RLOGServer`` and
-``RLOGWriter``.
+``RLOGWriter``.p
 
 <Tabs>
 <TabItem value="kt" label="Kotlin" default>
