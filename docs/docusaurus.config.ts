@@ -71,24 +71,18 @@ const config: Config = {
     footer: {
       style: 'dark',
       links: [
-//         {
-//           title: 'Community',
-//           items: [
-//             {
-//               label: 'Stack Overflow',
-//               href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-//             },
-//           ],
-//         },
-//         {
-//           title: 'More',
-//           items: [
-//             {
-//               label: 'GitHub',
-//               href: 'https://github.com/facebook/docusaurus',
-//             },
-//           ],
-//         },
+        {
+          label: 'AdvantageKit',
+          href: 'https://docs.advantagekit.org',
+        },
+        {
+          label: 'AdvantageScope',
+          href: 'https://docs.advantagescope.org',
+        },
+        {
+          label: 'GitHub',
+          href: 'https://github.com/blaze-developer/chrono'
+        }
       ],
       copyright: `Copyright © ${new Date().getFullYear() == 2025 ? "" : "2025-"}${new Date().getFullYear()} Chrono`,
     },
