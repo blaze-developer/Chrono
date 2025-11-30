@@ -19,7 +19,7 @@ A log receiver is something that accepts the current cycle's logged data, and pu
 like a log file or stream. Receivers currently included in Chrono are ``RLOGServer`` and
 ``RLOGWriter``.p
 
-<Tabs>
+<Tabs groupId="lang" queryString="lang">
 <TabItem value="kt" label="Kotlin" default>
 
 In Kotlin, receivers can be added using the ``+=`` operator, or a method:
@@ -57,7 +57,7 @@ Some examples of metadata include:
 
 Note that it is entirely up to *you* what metadata you do and don't include in your logs.
 
-<Tabs>
+<Tabs groupId="lang" queryString="lang">
 <TabItem value="kt" label="Kotlin" default>
 
 ```kotlin
