@@ -1,10 +1,10 @@
 package com.blazedeveloper.chrono.structure
 
-data class LogValue(val value: Any, val type: LoggableType) {
+class LogValue private constructor(val value: Any, val type: LoggableType) {
     companion object {
         fun ByteArray.asLogValue() = LogValue(this, LoggableType.ByteArray)
         fun Boolean.asLogValue() = LogValue(this, LoggableType.Boolean)
-        fun Int.asLogValue() = LogValue(this, LoggableType.Integer)
+        fun Int.asLogValue() = LogValue(this.toLong(), LoggableType.Integer)
         fun Long.asLogValue() = LogValue(this, LoggableType.Integer)
         fun Float.asLogValue() = LogValue(this, LoggableType.Float)
         fun Double.asLogValue() = LogValue(this, LoggableType.Double)
@@ -16,6 +16,8 @@ data class LogValue(val value: Any, val type: LoggableType) {
         fun DoubleArray.asLogValue() = LogValue(this, LoggableType.DoubleArray)
         fun Array<String>.asLogValue() = LogValue(this, LoggableType.StringArray)
     }
+
+    fun copy(): LogValue = LogValue(value, type)
 }
 
 enum class LoggableType(val wpilogType: String) {

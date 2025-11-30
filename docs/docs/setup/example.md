@@ -6,7 +6,7 @@ sidebar_position: 3
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-<Tabs>
+<Tabs groupId="lang" queryString="lang">
 <TabItem value="kt" label="Kotlin" default>
 
 ```kotlin
