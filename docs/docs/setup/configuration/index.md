@@ -1,5 +1,5 @@
 ---
-title: "Logger Configuration"
+title: "Configuration"
 sidebar_position: 1
 ---
 import Tabs from '@theme/Tabs';
@@ -55,7 +55,14 @@ Some examples of metadata include:
  - Runtime environments
  - Your robot's name
 
-Note that it is entirely up to *you* what metadata you do and don't include in your logs.
+:::note
+It is entirely up to *you* what metadata you do and don't include in your logs.
+:::
+
+:::info
+More information on setting up version metadata,
+such as branches and git hashes, can be found [here](./version-control.md)
+:::
 
 <Tabs groupId="lang" queryString="lang">
 <TabItem value="kt" label="Kotlin" default>
