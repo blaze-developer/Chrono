@@ -1,5 +1,5 @@
 ---
-title: "Example Setups"
+title: "Example"
 sidebar_position: 3
 ---
 

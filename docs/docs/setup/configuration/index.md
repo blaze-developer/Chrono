@@ -1,12 +1,12 @@
 ---
-title: "Configuration"
-sidebar_position: 1
+title: "Logger Configuration"
+sidebar_position: 2
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 :::info
-**Examples of Logger configuration can be found [here](./example).**
+**Examples of Logger configuration can be found [here](../opmode/example.md).**
 :::
 
 :::warning

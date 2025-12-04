@@ -1,13 +1,13 @@
 ---
-title: "Linear Opmode Setup"
-sidebar_position: 2
+title: "Opmode Setup"
+sidebar_position: 3
 ---
 
 :::info
-Example setups are available [here](./example.md)!
+Example setups are available [here](example.md)!
 :::
 
-This is how you set up a Chrono linear opmode.
+This is how you set up a Chrono opmode.
 
 After installing, make a linear opmode that extends from ``LoggedLinearOpMode``, and implement the
 ``startLoggedOpMode()`` function.

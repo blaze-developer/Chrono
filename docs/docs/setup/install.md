@@ -1,6 +1,6 @@
 ---
 title: "Installation"
-sidebar_position: 2
+sidebar_position: 1
 ---
 
 [![](https://jitpack.io/v/com.blazedeveloper/chrono.svg)](https://jitpack.io/#com.blazedeveloper/chrono)
