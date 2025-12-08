@@ -124,15 +124,20 @@ object Logger {
     }
 
     // Output methods for user code to publish output data.
+
+    @JvmStatic fun output(key: String, value: ByteArray) = ifRunning { outputsTable.put(key, value) }
     @JvmStatic fun output(key: String, value: String) = ifRunning { outputsTable.put(key, value) }
     @JvmStatic fun output(key: String, value: Boolean) = ifRunning { outputsTable.put(key, value) }
     @JvmStatic fun output(key: String, value: Int) = ifRunning { outputsTable.put(key, value) }
     @JvmStatic fun output(key: String, value: Long) = ifRunning { outputsTable.put(key, value) }
     @JvmStatic fun output(key: String, value: Float) = ifRunning { outputsTable.put(key, value) }
     @JvmStatic fun output(key: String, value: Double) = ifRunning { outputsTable.put(key, value) }
-    @JvmStatic fun output(key: String, value: ByteArray) = ifRunning { outputsTable.put(key, value) }
-    @JvmStatic fun output(key: String, value: DoubleArray) = ifRunning { outputsTable.put(key, value) }
     @JvmStatic fun output(key: String, value: Array<String>) = ifRunning { outputsTable.put(key, value) }
+    @JvmStatic fun output(key: String, value: BooleanArray) = ifRunning { outputsTable.put(key, value) }
+    @JvmStatic fun output(key: String, value: IntArray) = ifRunning { outputsTable.put(key, value) }
+    @JvmStatic fun output(key: String, value: LongArray) = ifRunning { outputsTable.put(key, value) }
+    @JvmStatic fun output(key: String, value: FloatArray) = ifRunning { outputsTable.put(key, value) }
+    @JvmStatic fun output(key: String, value: DoubleArray) = ifRunning { outputsTable.put(key, value) }
     @JvmStatic fun <E : Enum<E>> output(key: String, value: E) = ifRunning { outputsTable.put(key, value) }
     @JvmStatic fun <E : Enum<E>> output(key: String, value: Array<E>) = ifRunning { outputsTable.put(key, value) }
 
