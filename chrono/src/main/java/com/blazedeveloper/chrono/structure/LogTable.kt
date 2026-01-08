@@ -1,6 +1,8 @@
 package com.blazedeveloper.chrono.structure
 
+import android.graphics.Color
 import com.blazedeveloper.chrono.structure.LogValue.Companion.asLogValue
+import com.qualcomm.robotcore.hardware.NormalizedRGBA
 import kotlin.time.Duration
 
 class LogTable @JvmOverloads constructor(
@@ -88,6 +90,9 @@ class LogTable @JvmOverloads constructor(
 
     /** Puts an enum array [value] represented by a string into the table at a specified [key] */
     fun <E : Enum<E>> put(key: String, value: Array<E>) = put(key, value.map { it.name }.toTypedArray())
+
+    /** Puts a NormalizedRGBA color represented by a hex string into the table at a specified key */
+    fun put(key: String, value: NormalizedRGBA) = put(key, "#%x".format(value.toColor()))
 
     /**
      * Gets a raw LogValue from the table at the specified [key].
@@ -218,4 +223,18 @@ class LogTable @JvmOverloads constructor(
      */
     inline fun <reified E: Enum<E>> get(key: String, default: Array<E>) =
         get(key, default.map { it.name }.toTypedArray()).map { enumValueOf<E>(it) }.toTypedArray()
+
+    /**
+     * Gets a color object from the table at the specified [key],
+     * If the data does not exist or is of the wrong type,
+     * the [default] is returned.
+     */
+    fun get(key: String, default: NormalizedRGBA): NormalizedRGBA =
+        NormalizedRGBA().apply {
+            val color = Color.valueOf(Color.parseColor(get(key, "#%x".format(default.toColor()))))
+            alpha = color.alpha()
+            red = color.red()
+            green = color.green()
+            blue = color.blue()
+        }
 }
