@@ -17,9 +17,10 @@ abstract class AutoLoggableInputs : LoggableInputs {
         operator fun setValue(thisRef: Any, property: KProperty<*>, newValue: T) { value = newValue }
         operator fun getValue(thisRef: Any, property: KProperty<*>) = value
 
-        operator fun provideDelegate(thisRef: Any, property: KProperty<*>) {
+        operator fun provideDelegate(thisRef: Any, property: KProperty<*>): Field<T> {
             toLogs.add { it.toLog(key, value) }
             fromLogs.add { it.fromLog(key, value) }
+            return this
         }
     }
 
