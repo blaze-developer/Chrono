@@ -3,6 +3,7 @@ package com.blazedeveloper.chrono.structure
 import android.graphics.Color
 import com.blazedeveloper.chrono.structure.LogValue.Companion.asLogValue
 import com.qualcomm.robotcore.hardware.NormalizedRGBA
+import kotlin.math.roundToInt
 import kotlin.time.Duration
 
 class LogTable @JvmOverloads constructor(
@@ -91,8 +92,8 @@ class LogTable @JvmOverloads constructor(
     /** Puts an enum array [value] represented by a string into the table at a specified [key] */
     fun <E : Enum<E>> put(key: String, value: Array<E>) = put(key, value.map { it.name }.toTypedArray())
 
-    /** Puts a NormalizedRGBA color represented by a hex string into the table at a specified key */
-    fun put(key: String, value: NormalizedRGBA) = put(key, "#%x".format(value.toColor()))
+    /** Puts a NormalizedRGBA color represented by a hex triplet (WITHOUT ALPHA) into the table at a specified key */
+    fun put(key: String, value: NormalizedRGBA) = put(key, value.toHexTriplet())
 
     /**
      * Gets a raw LogValue from the table at the specified [key].
@@ -231,10 +232,18 @@ class LogTable @JvmOverloads constructor(
      */
     fun get(key: String, default: NormalizedRGBA): NormalizedRGBA =
         NormalizedRGBA().apply {
-            val color = Color.valueOf(Color.parseColor(get(key, "#%x".format(default.toColor()))))
-            alpha = color.alpha()
-            red = color.red()
-            green = color.green()
-            blue = color.blue()
+            val color = Color.parseColor(get(key, default.toHexTriplet()))
+            alpha = 1f
+            red = Color.red(color) / 255f
+            green = Color.green(color) / 255f
+            blue = Color.blue(color) / 255f
         }
+
+    fun NormalizedRGBA.toHexTriplet(): String {
+        val r = (red   * 255f).roundToInt().coerceIn(0, 255)
+        val g = (green * 255f).roundToInt().coerceIn(0, 255)
+        val b = (blue  * 255f).roundToInt().coerceIn(0, 255)
+
+        return "#%02X%02X%02X".format(r, g, b)
+    }
 }
