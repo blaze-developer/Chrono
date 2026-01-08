@@ -1,9 +1,8 @@
 package com.blazedeveloper.chrono.structure
 
-import android.graphics.Color
 import com.blazedeveloper.chrono.structure.LogValue.Companion.asLogValue
 import com.qualcomm.robotcore.hardware.NormalizedRGBA
-import kotlin.math.roundToInt
+import kotlin.math.abs
 import kotlin.time.Duration
 
 class LogTable @JvmOverloads constructor(
@@ -90,10 +89,12 @@ class LogTable @JvmOverloads constructor(
     fun <E : Enum<E>> put(key: String, value: E) = put(key, value.name)
 
     /** Puts an enum array [value] represented by a string into the table at a specified [key] */
-    fun <E : Enum<E>> put(key: String, value: Array<E>) = put(key, value.map { it.name }.toTypedArray())
+    fun <E : Enum<E>> put(key: String, value: Array<E>) =
+        put(key, value.map { it.name }.toTypedArray())
 
-    /** Puts a NormalizedRGBA color represented by a hex triplet (WITHOUT ALPHA) into the table at a specified key */
-    fun put(key: String, value: NormalizedRGBA) = put(key, value.toHexTriplet())
+    /** Puts a normalized color represented by a float array (ARGB order) into the table at a specified key */
+    fun put(key: String, value: NormalizedRGBA) =
+        put(key, floatArrayOf(value.alpha, value.red, value.green, value.blue))
 
     /**
      * Gets a raw LogValue from the table at the specified [key].
@@ -222,7 +223,7 @@ class LogTable @JvmOverloads constructor(
      * If the data does not exist or is of the wrong type,
      * the [default] is returned.
      */
-    inline fun <reified E: Enum<E>> get(key: String, default: Array<E>) =
+    inline fun <reified E : Enum<E>> get(key: String, default: Array<E>) =
         get(key, default.map { it.name }.toTypedArray()).map { enumValueOf<E>(it) }.toTypedArray()
 
     /**
@@ -230,20 +231,13 @@ class LogTable @JvmOverloads constructor(
      * If the data does not exist or is of the wrong type,
      * the [default] is returned.
      */
-    fun get(key: String, default: NormalizedRGBA): NormalizedRGBA =
-        NormalizedRGBA().apply {
-            val color = Color.parseColor(get(key, default.toHexTriplet()))
-            alpha = 1f
-            red = Color.red(color) / 255f
-            green = Color.green(color) / 255f
-            blue = Color.blue(color) / 255f
+    fun get(key: String, default: NormalizedRGBA): NormalizedRGBA {
+        val array = get(key, floatArrayOf(default.alpha, default.red, default.green, default.blue))
+        return NormalizedRGBA().apply {
+            alpha = array[0]
+            red = array[1]
+            green = array[2]
+            blue = array[3]
         }
-
-    fun NormalizedRGBA.toHexTriplet(): String {
-        val r = (red   * 255f).roundToInt().coerceIn(0, 255)
-        val g = (green * 255f).roundToInt().coerceIn(0, 255)
-        val b = (blue  * 255f).roundToInt().coerceIn(0, 255)
-
-        return "#%02X%02X%02X".format(r, g, b)
     }
 }
