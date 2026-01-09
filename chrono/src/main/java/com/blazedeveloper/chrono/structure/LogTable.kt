@@ -92,9 +92,9 @@ class LogTable @JvmOverloads constructor(
     fun <E : Enum<E>> put(key: String, value: Array<E>) =
         put(key, value.map { it.name }.toTypedArray())
 
-    /** Puts a normalized color represented by a float array (ARGB order) into the table at a specified key */
+    /** Puts a normalized color represented by a float array (RGBA order) into the table at a specified key */
     fun put(key: String, value: NormalizedRGBA) =
-        put(key, floatArrayOf(value.alpha, value.red, value.green, value.blue))
+        put(key, floatArrayOf(value.red, value.green, value.blue, value.alpha))
 
     /**
      * Gets a raw LogValue from the table at the specified [key].
@@ -232,12 +232,12 @@ class LogTable @JvmOverloads constructor(
      * the [default] is returned.
      */
     fun get(key: String, default: NormalizedRGBA): NormalizedRGBA {
-        val array = get(key, floatArrayOf(default.alpha, default.red, default.green, default.blue))
+        val array = get(key, floatArrayOf(default.red, default.green, default.blue, default.alpha))
         return NormalizedRGBA().apply {
-            alpha = array[0]
-            red = array[1]
-            green = array[2]
-            blue = array[3]
+            red = array[0]
+            green = array[1]
+            blue = array[2]
+            alpha = array[3]
         }
     }
 }

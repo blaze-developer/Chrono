@@ -1,5 +1,6 @@
 package com.blazedeveloper.chrono.structure
 
+import com.qualcomm.robotcore.hardware.NormalizedRGBA
 import kotlin.reflect.KProperty
 
 interface LoggableInputs {
@@ -40,6 +41,7 @@ abstract class AutoLoggableInputs : LoggableInputs {
     fun logged(key: String, value: Array<String>) = Field(key, value, LogTable::put, LogTable::get)
     inline fun <reified E: Enum<E>> logged(key: String, value: E) = Field(key, value, LogTable::put, LogTable::get)
     inline fun <reified E: Enum<E>> logged(key: String, value: Array<E>) = Field(key, value, LogTable::put, LogTable::get)
+    fun logged(key: String, value: NormalizedRGBA) = Field(key, value, LogTable::put, LogTable::get)
 
     val toLogs = mutableListOf<(LogTable) -> Unit>()
     val fromLogs = mutableListOf<(LogTable) -> Unit>()

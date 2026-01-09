@@ -22,3 +22,11 @@ Chrono supports these simple types and their arrays:
 ### Enums
 Chrono also supports logging and replaying generic enum values and enum arrays.
 They are represented by string values from the enum's ``name()`` method.
+
+### Normalized Colors
+Chrono also supports logging and replaying ``NormalizedRGBA`` objects from color sensors.
+These are represented by float arrays, storing the colors components in order:
+ - Red Channel
+ - Green Channel
+ - Blue Channel
+ - Alpha / Opacity
