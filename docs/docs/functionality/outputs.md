@@ -1,5 +1,5 @@
 ---
-title: "Outputs"
+title: "Output Logging"
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -15,7 +15,7 @@ Logger.output("YourKey", "YourValue")
 Logger.output("Lift/Setpoint", setpointPosition)
 Logger.output("RobotState", State.COLLECTING) // Enum
 ```
-
+in
 </TabItem>
 <TabItem value="java" label="Java">
 
