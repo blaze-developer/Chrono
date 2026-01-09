@@ -5,6 +5,7 @@ import com.blazedeveloper.chrono.dataflow.ReplaySource
 import com.blazedeveloper.chrono.output.ConsoleLogger
 import com.blazedeveloper.chrono.structure.LogTable
 import com.blazedeveloper.chrono.structure.LoggableInputs
+import com.qualcomm.robotcore.hardware.NormalizedRGBA
 import kotlin.system.exitProcess
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.nanoseconds
@@ -140,6 +141,7 @@ object Logger {
     @JvmStatic fun output(key: String, value: DoubleArray) = ifRunning { outputsTable.put(key, value) }
     @JvmStatic fun <E : Enum<E>> output(key: String, value: E) = ifRunning { outputsTable.put(key, value) }
     @JvmStatic fun <E : Enum<E>> output(key: String, value: Array<E>) = ifRunning { outputsTable.put(key, value) }
+    @JvmStatic fun output(key: String, value: NormalizedRGBA) = ifRunning { outputsTable.put(key, value) }
 
     /** Sends data to receivers. Runs after user code. **/
     internal fun postUser() = ifRunning {
