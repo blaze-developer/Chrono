@@ -27,11 +27,7 @@ Chrono handles and logs a few built-in inputs, including [synchronized timestamp
 gamepads, and events like opmode init, active, and stop requests.
 
 ### Timestamps
-Although Chrono cannot override built in methods like ``### Lifecycle Events
-Opmode lifecycle events need to come from a logged and deterministic source to guarantee replay
-accuracy. In your opmodes, ensure that you always use members ``isActive``, ``inInit``, and``shouldStop``
-as opposed to the methods ``opModeIsActive``, ``opModeInInit``, and ``isStopRequested``.
-System.nanoTime`` with its own time source,
+Although Chrono cannot override built in methods like ``System.nanoTime`` with its own time source,
 it provides ``Logger.timestamp`` as the way to fetch a deterministic and synchronized
 timestamp. This should be used for all replayed logic, and methods like ``System.nanoTime`` should
 only be used in hardware implementations / non-replayed logic.
