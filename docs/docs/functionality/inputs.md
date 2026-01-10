@@ -99,9 +99,9 @@ current cycle is logged and synchronous.
 :::
 
 ## Automatic Input Logging
-For kotlin users looking to simplify their code and skip writing repetitive logtable operations,
+For kotlin users looking to simplify their code and skip writing repetitive logging operations,
 your input schemas can extend from the abstract class ``AutoLoggableInputs``, using delegates
-for input fields.
+for input fields. This manages and handles the ''fromLog'' and ''toLog'' methods automatically.
 
 The below is an example of the same input object from above, but changed to make use
 of automatic input logging.
@@ -121,5 +121,6 @@ class DriveInputs : AutoLoggableInputs() {
 
 :::warning
 This feature is not available for Java users, as the implementation
-relies heavily on Kotlin's language features.
+relies heavily on Kotlin's language features. Manually writing methods
+may be required.
 :::
