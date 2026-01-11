@@ -211,12 +211,13 @@ class LogTable @JvmOverloads constructor(
     fun get(key: String, default: Array<String>) =
         get(key, default.asLogValue()).value as Array<String>
 
-    /** Gets an enum item from the table at the specified [key],
+    /**
+     * Gets an enum item from the table at the specified [key],
      * If the data does not exist or is of the wrong type,
      * the [default] is returned.
      */
     inline fun <reified E : Enum<E>> get(key: String, default: E) =
-        enumValueOf<E>(get(key, default.name))
+        get(key, default, E::class.java)
 
     /**
      * Gets an enum array item from the table at the specified [key],
@@ -224,7 +225,36 @@ class LogTable @JvmOverloads constructor(
      * the [default] is returned.
      */
     inline fun <reified E : Enum<E>> get(key: String, default: Array<E>) =
-        get(key, default.map { it.name }.toTypedArray()).map { enumValueOf<E>(it) }.toTypedArray()
+        get(key, default, E::class.java)
+
+    /**
+     * Gets an enum item from the table at the specified [key],
+     * If the data does not exist or is of the wrong type,
+     * the [default] is returned.
+     *
+     * This method requires the enum's class, this is due to Java's type
+     * erasure, and Kotlin users should leave out the class parameter.
+     */
+    fun <E: Enum<E>> get(key: String, default: E, clazz: Class<E>): E =
+        java.lang.Enum.valueOf<E>(clazz, get(key, default.name))
+
+    /**
+     * Gets an enum array item from the table at the specified [key],
+     * If the data does not exist or is of the wrong type,
+     * the [default] is returned.
+     *
+     * This method requires the enum's class, this is due to Java's type
+     * erasure, and Kotlin users should leave out the class parameter.
+     */
+    @Suppress("UNCHECKED_CAST")
+    fun <E: Enum<E>> get(key: String, default: Array<E>, clazz: Class<E>): Array<E> {
+        val names = get(key, default.map { it.name }.toTypedArray())
+        return (java.lang.reflect.Array.newInstance(clazz, names.size) as Array<E>).apply {
+            names.forEachIndexed { index, name ->
+                set(index, java.lang.Enum.valueOf<E>(clazz, name))
+            }
+        }
+    }
 
     /**
      * Gets a color object from the table at the specified [key],
